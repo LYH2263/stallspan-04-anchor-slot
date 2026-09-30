@@ -14,7 +14,9 @@ def run_allocate(segment_id: int = 1, db: Session = Depends(get_db)):
     if not seg: raise HTTPException(404, "街段不存在")
     pillars = [{"position_m": p.position_m, "thickness_m": p.thickness_m}
                for p in db.scalars(select(Pillar).where(Pillar.segment_id == segment_id)).all()]
-    vendors = [{"id": v.id, "name": v.name, "stall_width_m": v.stall_width_m, "priority": v.priority}
+    vendors = [{"id": v.id, "name": v.name, "stall_width_m": v.stall_width_m,
+                "priority": v.priority, "anchor_m": v.anchor_m,
+                "anchor_tolerance_m": v.anchor_tolerance_m}
                for v in db.scalars(select(Vendor).where(Vendor.market_day_id == seg.market_day_id)).all()]
     result = result_to_dict(allocate_first_fit(seg.width_m, vendors, pillars))
     result["segment"] = {"id": seg.id, "name": seg.name, "width_m": seg.width_m}
