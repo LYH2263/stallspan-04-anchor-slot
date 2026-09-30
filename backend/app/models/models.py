@@ -1,4 +1,5 @@
 from datetime import date, datetime
+from typing import Optional
 from sqlalchemy import Date, DateTime, Float, ForeignKey, Integer, String, Text
 from sqlalchemy.orm import Mapped, mapped_column
 from app.database import Base
@@ -23,6 +24,8 @@ class Vendor(Base):
     name: Mapped[str] = mapped_column(String(64))
     stall_width_m: Mapped[float] = mapped_column(Float)
     priority: Mapped[int] = mapped_column(Integer, default=1)
+    anchor_m: Mapped[Optional[float]] = mapped_column(Float, nullable=True)
+    tolerance_m: Mapped[Optional[float]] = mapped_column(Float, nullable=True)
 
 class Pillar(Base):
     __tablename__ = "pillars"

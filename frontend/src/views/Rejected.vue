@@ -9,13 +9,16 @@ onMounted(async () => {
 </script>
 <template>
   <h1>放不下</h1>
-  <p class="sub">无法在连续空档内安置且不跨越挡柱的摊位</p>
+  <p class="sub">无法在连续空档内安置且不跨越挡柱，或起点无法落在锚点容差带内的摊位</p>
   <div class="card">
     <table>
-      <thead><tr><th>摊主</th><th>需求宽度</th><th>原因</th></tr></thead>
+      <thead><tr><th>摊主</th><th>需求宽度</th><th>期望锚点/容差</th><th>原因</th></tr></thead>
       <tbody>
         <tr v-for="r in rows" :key="r.vendor_id">
-          <td>{{ r.vendor_name }}</td><td>{{ r.width_m }}</td><td>{{ r.reason }}</td>
+          <td>{{ r.vendor_name }}</td>
+          <td>{{ r.width_m }}</td>
+          <td>{{ r.anchor_m != null ? r.anchor_m + ' ± ' + (r.tolerance_m ?? 0) : '—' }}</td>
+          <td>{{ r.reason }}</td>
         </tr>
       </tbody>
     </table>

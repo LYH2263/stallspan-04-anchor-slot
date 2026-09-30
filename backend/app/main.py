@@ -12,6 +12,12 @@ from app.services.seed import seed_if_empty
 @asynccontextmanager
 async def lifespan(_app: FastAPI):
     Base.metadata.create_all(bind=engine)
+    # Lightweight migration for pre-existing database volumes: create_all does
+    # not add columns to tables that already exist.
+    from sqlalchemy import text
+    with engine.begin() as conn:
+        conn.execute(text("ALTER TABLE vendors ADD COLUMN IF NOT EXISTS anchor_m DOUBLE PRECISION"))
+        conn.execute(text("ALTER TABLE vendors ADD COLUMN IF NOT EXISTS tolerance_m DOUBLE PRECISION"))
     if settings.seed_on_empty:
         db = SessionLocal()
         try:
